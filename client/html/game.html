@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel='stylesheet' href="/client/css/style.css">
+	<script src="/socket.io/socket.io.js"></script>
+</head>
+	<body>
+		<canvas id='canvas' width=1200 height=550></canvas>
+		<script id='vertex-shader' type='notjs'>
+			attribute vec4 a_position;
+			attribute vec2 a_texcoord;
+			attribute vec3 a_normal;
+			
+			attribute mat4 matrix;
+
+			uniform mat4 viewprojection;
+			
+			uniform vec3 u_cameraposition;
+			uniform vec3 u_pointsource;
+			
+			varying vec2 v_texcoord;
+			varying mat3 v_matrix;
+			
+			varying vec3 v_cameradirection;
+			varying vec3 v_pointdirection;
+			varying vec3 v_normal;
+			
+			void main() {
+				gl_Position = viewprojection * matrix * a_position;
+				
+				vec3 position = (matrix * a_position).xyz;
+				v_cameradirection = u_cameraposition - position;
+				v_pointdirection = u_pointsource - position;
+				
+				v_texcoord = a_texcoord;
+				v_matrix = mat3(matrix); v_normal = a_normal; /*Phong
+				v_normal = mat3(matrix) * a_normal; //Goraud*/
+			}
+		</script>
+		<script id='fragment-shader' type='notjs'>
+			precision mediump float;
+
+			varying vec3 v_position;
+			varying vec3 v_normal;
+			varying mat3 v_matrix;
+			varying vec2 v_texcoord;
+			
+			uniform vec3 u_directionalsource;
+			varying vec3 v_cameradirection;
+			varying vec3 v_pointdirection;
+
+			uniform float u_luminosity;
+			uniform float u_ambient;
+			//uniform float u_directional;
+			uniform float u_point;
+			
+			uniform float u_kambient;
+			uniform float u_kdiffuse;
+			uniform float u_kspecular;
+			uniform float u_shininess;
+			
+			uniform sampler2D u_texture;
+
+			void main() {
+				gl_FragColor = texture2D(u_texture, v_texcoord);
+				
+				vec3 n = v_matrix * normalize(v_normal); /*Phong
+				vec3 n = normalize(v_normal); //Goraud*/
+				vec3 cameradirection = normalize(v_cameradirection);
+				vec3 pointdirection = normalize(v_pointdirection);
+				
+				float ambient = u_kambient * u_ambient;
+				float diffuse = u_kdiffuse * u_point * dot(u_directionalsource , n);
+				float specular = 0.0;
+				float specularlight = dot(normalize(cameradirection + pointdirection), n);
+				if(specularlight > 0.0) {
+					specular = u_kspecular * u_point * pow(specularlight, u_shininess);
+				}
+				
+				gl_FragColor.rgb += u_luminosity + ambient + diffuse + specular;
+			}
+		</script>		
+		
+		<script src="/shared/statistics.js"></script>
+		<script src="/shared/utils.js"></script>
+		<script src="/client/webglutils.js"></script>
+		<script src="/shared/models.js"></script>		
+		<script src="/shared/objlist.js"></script>
+		<script src="/shared/parts.js"></script>	
+		<script src="/client/camera.js"></script>
+		<script src="/client/simulator.js"></script>
+		<script src="/client/connection.js"></script>		
+		<script src="/client/game.js"></script>
+	</body>
+
+</html>

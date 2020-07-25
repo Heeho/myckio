@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel='stylesheet' href="/client/css/style.css">
+</head>
+	<body class='monospacecenter'>
+	
+		<p class='space'></p>
+		<p id='header'></p>
+		
+		<br>- STATISTICS -<br>
+		
+		<table id='table' align='center'>			
+			<tr align='left'><td>Kills total:		</td><td id='kills'></td><tr>
+			<tr align='left'><td>Play time:			</td><td id='time'></td><tr>
+			<tr align='left'><td>Kills per second:	</td><td id='kps'></td><tr>
+		</table>
+
+		<script>
+			document.getElementById('header').innerHTML = localStorage.getItem('header');
+			document.getElementById('kills').innerHTML = localStorage.getItem('kills');
+			document.getElementById('time').innerHTML = localStorage.getItem('time') + ' seconds';
+			document.getElementById('kps').innerHTML = localStorage.getItem('kps');
+		</script>	
+
+		<p>
+			<table align='center'>
+			<tr><td><a href='index.html'>Fuck no!..</a></td><td>| Try again? |</td><td><a href='game.html'>Hell yeah!</a></td></tr>
+			</table>
+		</p>
+		
+	</body>
+</html>
