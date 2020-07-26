@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>nodejs server test</title>
-	<script src='/socket.io/socket.io.js'></script>
+	<title>test</title>
 </head>
 	<body>
-		test
+		<script>
+			var a = [0,1,2,3,4,5];
+			var b = [3,0];
+			var has;
+			document.write('a='+a+'<br/>');
+			for(var i = a.length-1; i > -1; i--) { document.write('a['+i+'] = '+a[i]+'<br/>');
+				has = false;
+				for(j in b) {
+					if(a[i] == b[j]) {document.write('b has a['+i+']='+a[i]+'<br/>');has = true; break;}
+				}
+				if(!has) {a.splice(i, 1); document.write('spliced a['+i+']<br/>');}
+				document.write('a='+a+'<br/>');
+			}
+			document.write('a='+a);
+		</script>
 	</body>
-	<script src='/static/js/connection.js'>
-	</script>
 </html>

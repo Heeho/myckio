@@ -15,7 +15,6 @@
 		main();
 	});
 
-	
 	function emitcontrols() {
 		socket.emit('controlsupdate', {id: player.id, controls: player.controls});
 	}

@@ -12,7 +12,7 @@
 		this.state = new State();
 	}
 	Camera.prototype.realign = function()
-		{ console.log('auto: ', this.observer.controls.autopilotON, 'locked: ', this.observer.controls.lockedontarget);
+		{ //console.log('auto: ', this.observer.controls.autopilotON, 'locked: ', this.observer.controls.lockedontarget);
 			(this.observer.controls.autopilotON && this.observer.controls.lockedontarget) ? this.topdown() : this.lof();
 		}
 	Camera.prototype.topdown = function()

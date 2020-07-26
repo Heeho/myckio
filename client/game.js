@@ -59,8 +59,8 @@
 						undefined;		
 					player.controls.mouseY =
 						condition ? undefined :
-						nextY > currentY ? true :
-						nextY < currentY ? false :
+						nextY > currentY ? false :
+						nextY < currentY ? true :
 						undefined;						
 
 					currentX = nextX;

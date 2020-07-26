@@ -17,6 +17,7 @@
 	var m4 = utils.m4;
 	var snapshots = [];
 	var gameupdaterate = 1000/20;
+	var processorrate = 1000/60;
 	
 	processor.init();
 	
@@ -42,7 +43,7 @@
 		socket.on('controlsupdate', (data) => {
 			//console.log('got input from client id ' + data.id); //put input to corresponding player's input queue
 			//console.log(data);
-			for(var i in processor.players[data.id].controls) { 
+			for(var i in processor.players[data.id].controls) { //console.log(processor.players[data.id].controls[i]);
 				processor.players[data.id].controls[i] = data.controls[i]; //console.log(processor.players[data.id].controls);
 			}
 		});
@@ -55,7 +56,7 @@
 	
 	setInterval(function() {
 		processor.run(); //console.log(players);
-	}, 1000/60);
+	}, processorrate);
 	
 	setInterval(() => {
 		snapshots.push(writesnapshot());
@@ -80,12 +81,12 @@
 		var classes = Object.keys(snapshots[0]), gc, gt, ids, ss0, ss1;
 		var gameupdate = {};
 		for(var c in snapshots[0]) { gameupdate[c] = {}
-			for(var t in snapshots[0][c]) { gameupdate[c][t] = {}; ids = Object.keys(snapshots[0][c][t]);
-				for(var i in ids) {
+			for(var t in snapshots[0][c]) { gameupdate[c][t] = {}; ids = Object.keys(snapshots[0][c][t]); //console.log(83, ids);
+				for(var i in ids) { //console.log(84, ids[i]);
 					ss0 = snapshots[0][c][t][ids[i]];
 					ss1 = snapshots[1][c][t][ids[i]];
 					if(ss1 != undefined) {
-						gameupdate[c][t][i] = [ss0, m4.multiplyn(m4.substract(ss1, ss0), .333)];
+						gameupdate[c][t][i] = [ids[i], ss0, m4.multiplyn(m4.substract(ss1, ss0), processorrate/gameupdaterate)]; //console.log(processorrate/gameupdaterate);// gameupdaterate/processorrate = (1000/20)/(1000/60) = .333
 					} //else {console.log(97, snapshots[0][c][t][ids[i]], snapshots[1][c][t][ids[i]]);}
 				}
 			}
